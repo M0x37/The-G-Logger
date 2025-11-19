@@ -208,9 +208,11 @@ def main():
             if len(DROPBOX_ACCESS_TOKEN) < 20:
                 raise ValueError("Der Dropbox-Access-Token ist zu kurz oder ungültig. Bitte prüfe den Token.")
             dbx = dropbox.Dropbox(DROPBOX_ACCESS_TOKEN)
+            timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+            unique_filename = f"/G_LoggerExport_{timestamp}.zip"
             with open(zip_path, "rb") as f:
-                dbx.files_upload(f.read(), f"/G_LoggerExport.zip", mode=dropbox.files.WriteMode("overwrite"))
-            log("ZIP-Datei wurde zu Dropbox hochgeladen. ✅")
+                dbx.files_upload(f.read(), unique_filename)
+            log(f"ZIP-Datei wurde als '{unique_filename}' zu Dropbox hochgeladen. ✅")
             log("Erfolg! Die Datei befindet sich jetzt in deinem Dropbox-Hauptverzeichnis.")
             # Nach Erfolg: Aufräumarbeiten direkt hier durchführen
             folder_path = os.path.expanduser(r"~\G_LoggerExport")

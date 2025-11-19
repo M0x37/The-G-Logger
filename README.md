@@ -2,7 +2,7 @@
 
 The GLogger ist ein Toolkit zur Erstellung von Datenerfassungs-Anwendungen für Windows. Es bietet eine einfache Kommandozeilen-Oberfläche, um Python-Skripte zu generieren und sie in eigenständige `.exe`-Dateien zu kompilieren. Die Hauptanwendung `Graber` sammelt eine Vielzahl von Benutzer- und Systemdaten und lädt sie zur Analyse in ein privates Dropbox-Konto hoch.
 
-**Wichtiger Hinweis:** Der Name des hochgeladenen Archivs in Dropbox ist `G_LoggerExport.zip`.
+**Wichtiger Hinweis:** Jedes hochgeladene Archiv erhält einen eindeutigen Namen mit Zeitstempel, z.B. `G_LoggerExport_20251119-153000.zip`.
 
 ---
 
@@ -27,7 +27,7 @@ Die generierte `Graber.exe` führt die folgenden Aktionen auf dem Zielsystem aus
     -   Liste der laufenden Prozesse
     -   Aktive Netzwerkverbindungen und IP-Adressen
     -   Liste der installierten Programme (aus der Windows-Registry)
--   **Archivierung & Upload**: Fasst alle gesammelten Daten in einer `G_LoggerExport.zip`-Datei zusammen.
+-   **Archivierung & Upload**: Fasst alle gesammelten Daten in einer ZIP-Datei zusammen.
 -   **Dropbox-Upload**: Lädt die ZIP-Datei in das Stammverzeichnis des konfigurierten Dropbox-Kontos hoch.
 -   **Säuberung**: Löscht nach erfolgreichem Upload alle lokal gesammelten Dateien und das ZIP-Archiv, um Spuren zu minimieren.
 
@@ -144,4 +144,4 @@ python tools/generate_keylogger.py
 
     -   Die fertige ausführbare Datei befindet sich im `dist/`-Ordner: `dist/Graber.exe`.
 
-Diese `Graber.exe` ist die eigenständige Anwendung, die auf einem Ziel-Windows-System ausgeführt werden kann. Beim Ausführen arbeitet sie unsichtbar im Hintergrund und lädt am Ende die `G_LoggerExport.zip` in Ihr Dropbox-Konto hoch.
+Diese `Graber.exe` ist die eigenständige Anwendung, die auf einem Ziel-Windows-System ausgeführt werden kann. Beim Ausführen arbeitet sie unsichtbar im Hintergrund und lädt am Ende die erstellte ZIP-Datei (z.B. `G_LoggerExport_20251119-153000.zip`) in Ihr Dropbox-Konto hoch.
