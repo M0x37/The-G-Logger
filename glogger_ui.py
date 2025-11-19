@@ -5,8 +5,8 @@ import datetime
 # Add the current directory to the Python path to allow importing send_email
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-import generate_file
-import generate_Graber
+from tools import generate_file
+from tools import generate_Graber
 
 class Logger:
     def __init__(self, filepath):

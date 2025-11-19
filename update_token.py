@@ -12,7 +12,7 @@ def update_dropbox_token():
         return
 
     try:
-        with open("generate_Graber.py", "r", encoding="utf-8") as f:
+        with open("tools/generate_Graber.py", "r", encoding="utf-8") as f:
             lines = f.readlines()
 
         token_line_index = -1
@@ -27,7 +27,7 @@ def update_dropbox_token():
 
         lines[token_line_index] = f'    DROPBOX_ACCESS_TOKEN = "{new_token}"\n'
 
-        with open("generate_Graber.py", "w", encoding="utf-8") as f:
+        with open("tools/generate_Graber.py", "w", encoding="utf-8") as f:
             f.writelines(lines)
 
         print("Successfully updated the Dropbox access token in generate_Graber.py.")
