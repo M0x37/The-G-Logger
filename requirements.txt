@@ -1,0 +1,6 @@
+pynput
+pyinstaller
+psutil
+Pillow
+py-cpuinfo
+dropbox
