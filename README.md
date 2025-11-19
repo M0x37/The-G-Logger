@@ -1,4 +1,4 @@
-# The G Logger – Security-Demo
+# The G Logger – 
 
 **Hinweis:** Dieses Projekt demonstriert, wie Keylogging- und Datensammlungs-Skripte technisch aufgebaut sein können. Es ist **ausschließlich** für Lern-, Analyse- und Forensik-Zwecke auf deinen **eigenen Systemen** gedacht.
 
