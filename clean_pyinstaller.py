@@ -30,8 +30,8 @@ def clean_artifacts():
     # --- Graber Script Artifacts ---
     print("\nCleaning Graber script artifacts...")
     home_dir = os.path.expanduser('~')
-    graber_dir = os.path.join(home_dir, 'FScriptExport')
-    graber_zip = os.path.join(home_dir, 'FScriptExport.zip')
+    graber_dir = os.path.join(home_dir, 'G_LoggerExport')
+    graber_zip = os.path.join(home_dir, 'G_LoggerExport.zip')
 
     # Remove Graber directory
     if os.path.exists(graber_dir) and os.path.isdir(graber_dir):
