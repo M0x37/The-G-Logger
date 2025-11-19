@@ -1,147 +1,123 @@
-# The GLogger
+# The G Logger – Security-Demo
 
-The GLogger ist ein Toolkit zur Erstellung von Datenerfassungs-Anwendungen für Windows. Es bietet eine einfache Kommandozeilen-Oberfläche, um Python-Skripte zu generieren und sie in eigenständige `.exe`-Dateien zu kompilieren. Die Hauptanwendung `Graber` sammelt eine Vielzahl von Benutzer- und Systemdaten und lädt sie zur Analyse in ein privates Dropbox-Konto hoch.
+**Hinweis:** Dieses Projekt demonstriert, wie Keylogging- und Datensammlungs-Skripte technisch aufgebaut sein können. Es ist **ausschließlich** für Lern-, Analyse- und Forensik-Zwecke auf deinen **eigenen Systemen** gedacht.
 
-**Wichtiger Hinweis:** Jedes hochgeladene Archiv erhält einen eindeutigen Namen mit Zeitstempel, z.B. `G_LoggerExport_20251119-153000.zip`.
+## ⚠️ Rechtlicher Hinweis & Ethik
 
----
+- **Nur auf eigenen Systemen:** Führe die erzeugten Skripte ausschließlich auf Rechnern aus, die dir gehören oder auf denen du explizit die Zustimmung hast.
+- **Keine Überwachung Dritter:** Der Einsatz von Keyloggern oder Datensammlern ohne klare Einwilligung der betroffenen Person(en) ist in vielen Ländern strafbar.
+- **Verantwortungsvoller Umgang:** Nutze den Code, um zu verstehen, wie solche Tools funktionieren, damit du dich und andere besser davor schützen kannst (z.B. Erkennung, Forensik), **nicht** um andere heimlich auszuspionieren.
 
-## ⚠️ Disclaimer / Haftungsausschluss
+Wenn du dir unsicher bist, welche Nutzung rechtlich zulässig ist, **hole rechtlichen Rat ein**, bevor du irgendetwas außerhalb deiner eigenen Testumgebung einsetzt.
 
-Dieses Tool ist ausschließlich für Bildungs-, Forschungs- und autorisierte Testzwecke vorgesehen. Das Ausführen dieses Programms auf einem Computer ohne die ausdrückliche Zustimmung des Eigentümers ist illegal und unethisch. Die Autoren dieses Projekts übernehmen keine Verantwortung für Missbrauch oder Schäden, die durch dieses Programm verursacht werden. **Verwenden Sie es verantwortungsbewusst.**
+## Überblick
 
----
+**The G Logger** stellt eine einfache Konsolenoberfläche bereit, über die du:
 
-## ✨ Features von `Graber.exe`
+- einen **Keylogger** als Python-Skript  generieren kannst und dann automatisch in eine Exe umgewandelt wird.
+- ein **Graber-Skript** generieren kannst, das lokal Dokumente/Bilder/Systeminformationen einsammelt und in ein ZIP packt, und dann per Dropbox an deine Dropbox-Konto hochgeladen wird.
 
-Die generierte `Graber.exe` führt die folgenden Aktionen auf dem Zielsystem aus:
+## Projektstruktur & wichtige Dateien
 
--   **Log-Erstellung**: Führt eine Log-Datei über seine Aktivitäten.
--   **Dokumenten-Kopie**: Kopiert `.docx`, `.pdf`, und `.txt` Dateien aus dem `Dokumente`-Ordner des Benutzers.
--   **Bilder-Kopie**: Kopiert `.jpg`, `.jpeg`, und `.png` Dateien aus dem `Bilder`-Ordner des Benutzers.
--   **Screenshot**: Erstellt einen Screenshot des aktuellen Desktops.
--   **Chrome-Daten**: Versucht, die `Login Data`-Datenbank von Google Chrome zu kopieren und die darin enthaltenen (unverschlüsselten) Daten auszulesen.
--   **Systeminformationen**: Sammelt umfassende System- und Netzwerkinformationen:
-    -   Betriebssystem, Architektur, Hostname
-    -   CPU- und RAM-Details
-    -   Liste der laufenden Prozesse
-    -   Aktive Netzwerkverbindungen und IP-Adressen
-    -   Liste der installierten Programme (aus der Windows-Registry)
--   **Archivierung & Upload**: Fasst alle gesammelten Daten in einer ZIP-Datei zusammen.
--   **Dropbox-Upload**: Lädt die ZIP-Datei in das Stammverzeichnis des konfigurierten Dropbox-Kontos hoch.
--   **Säuberung**: Löscht nach erfolgreichem Upload alle lokal gesammelten Dateien und das ZIP-Archiv, um Spuren zu minimieren.
+- **`glogger_ui.py`**
+  - Startskript mit einem einfachen Textmenü.
+  - Bietet Optionen zum Erzeugen des Keylogger-Skripts und des Graber-Skripts.
+  - Leitet die Aktionen an die Funktionen in `tools/generate_keylogger.py` und `tools/generate_Graber.py` weiter.
 
----
+- **`tools/generate_keylogger.py`**
+  - Funktion `create_file()` erzeugt ein `Keylogger.py`-Skript.
+  - Der erzeugte Keylogger protokolliert Tastatureingaben in eine Logdatei.
+  - Versucht, das Skript mit **PyInstaller** zu einer ausführbaren Datei zu bauen, falls PyInstaller installiert ist.
 
-## 🛠️ Setup & Konfiguration
+- **`tools/generate_Graber.py`**
+  - Funktion `create_file()` erzeugt ein Skript `Graber.py`.
+  - Das generierte Skript sammelt auf dem lokalen System u.a.:
+    - ausgewählte Dokumente und Bilder,
+    - einfache Browser-Login-Daten (zur Demonstration des Zugriffs auf lokale Datenbanken),
+    - System- und Hardwareinformationen,
+    - laufende Prozesse und Netzwerkdaten.
+  - Es legt alles in einem Exportordner unter deinem Benutzerprofil ab und erstellt daraus ein ZIP-Archiv.
+  - Optional: Upload des ZIP-Archivs zu **Dropbox** mithilfe eines Access Tokens (siehe Abschnitt „Dropbox-Token“).
+  - Versucht ebenfalls, mit **PyInstaller** eine ausführbare Datei aus dem generierten Skript zu bauen.
 
-Folgen Sie diesen Schritten, um das Projekt einzurichten und zu konfigurieren.
+- **`update_token.py`**
+  - Bietet eine Hilfsfunktion `update_dropbox_token()`, die dich in der Konsole nach einem neuen Dropbox-Access-Token fragt.
+  - Sucht in `tools/generate_Graber.py` nach der Zeile mit `DROPBOX_ACCESS_TOKEN =` und ersetzt den dort hinterlegten Wert durch den neuen Token.
+  - Wird für **Testzwecke** genutzt, um das Dropbox-Beispiel mit deinem eigenen Konto zu verknüpfen (nur für Backups/Analysen deiner eigenen Systeme).
 
-### Schritt 1: Installation der Abhängigkeiten
+- **`clean_pyinstaller.py`**
+  - Entfernt typische **PyInstaller-Artefakte** (`dist/`, `build/`, `*.spec`).
+  - Löscht den lokalen Exportordner des Graber-Demos (`G_LoggerExport` im Benutzerverzeichnis) und das zugehörige ZIP, falls vorhanden.
+  - Kann genutzt werden, um deine Umgebung nach Tests wieder aufzuräumen.
 
-1.  **Repository klonen**:
-    ```bash
-    git clone <repository-url>
-    cd The-GLogger
-    ```
+- **`requirements.txt`**
+  - Listet die benötigten Python-Abhängigkeiten für die Demo (u.a. `pynput`, `psutil`, `Pillow`, `py-cpuinfo`, `dropbox`).
 
-2.  **Virtuelle Umgebung erstellen**:
-    ```bash
-    python -m venv venv
-    ```
+## Voraussetzungen
 
-3.  **Virtuelle Umgebung aktivieren**:
-    ```powershell
-    .\venv\Scripts\Activate.ps1
-    ```
-    Oder in CMD:
-    ```cmd
-    .\venv\Scripts\activate.bat
-    ```
+- **Betriebssystem:** Windows (einige Teile nutzen Windows-spezifische Pfade/Registry-Befehle).
+- **Python:** Empfohlen wird eine aktuelle Python-3-Version.
+- **Paketverwaltung:** `pip` zum Installieren der Abhängigkeiten.
+- Optional: **PyInstaller**, falls du die generierten Skripte als EXE bauen willst.
 
-4.  **Abhängigkeiten installieren**:
-    ```bash
-    pip install -r requirements.txt
-    ```
+## Projekt herunterladen & installieren
 
-### Schritt 2: Dropbox-Token erstellen
+1. **Repository klonen**
 
-Um Daten in Ihr Dropbox-Konto hochladen zu können, benötigen Sie einen Access Token.
+   ```bash
+   git clone https://github.com/M0x37/The-G-Logger.git
+   cd "The GLogger"
+   ```
 
-1.  **Dropbox App erstellen**:
-    -   Gehen Sie zu [Dropbox App Console](https://www.dropbox.com/developers/apps).
-    -   Klicken Sie auf **"Create app"**.
+   Alternativ kannst du das Repository als ZIP von GitHub herunterladen und entpacken.
 
-2.  **App-Konfiguration**:
-    -   **API wählen**: Wählen Sie **"Scoped access"**.
-    -   **Zugriffsart**: Wählen Sie **"App folder"** – dies beschränkt den Zugriff der App auf einen einzigen Ordner in Ihrem Dropbox-Konto.
-    -   **App-Namen wählen**: Geben Sie Ihrer App einen eindeutigen Namen (z.B. `GLoggerData`) und klicken Sie auf **"Create app"**.
+2. **Virtuelle Umgebung anlegen (empfohlen):**
 
-3.  **Berechtigungen (Permissions) festlegen**:
-    -   Navigieren Sie zum Tab **"Permissions"**.
-    -   Geben Sie der App die Berechtigung **`files.content.write`**. Stellen Sie sicher, dass das Kästchen markiert ist. Klicken Sie oben rechts auf **"Submit"**.
+   ```bash
+   python -m venv venv
+   # Windows PowerShell
+   .\venv\Scripts\Activate.ps1
+   ```
 
-4.  **Access Token generieren**:
-    -   Gehen Sie zurück zum Tab **"Settings"**.
-    -   Im Abschnitt **"Generated access token"** klicken Sie auf den Button **"Generate"**.
-    -   **Kopieren Sie den angezeigten Token.** Dies ist Ihr `DROPBOX_ACCESS_TOKEN`.
+3. **Abhängigkeiten installieren:**
 
-### Schritt 3: Token im Projekt speichern
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-Führen Sie das `update_token.py`-Skript aus, um den Token sicher in die Build-Konfiguration einzufügen.
+4. Optional: **PyInstaller** installieren (für EXE-Builds):
 
-```bash
-python update_token.py
-```
+   ```bash
+   pip install pyinstaller
+   ```
 
-Das Skript fordert Sie auf, den kopierten Token einzufügen.
+## Nutzung (nur zu Test-/Lernzwecken auf eigenen Systemen)
 
----
+> **Wichtig:** Die folgenden Hinweise dienen dazu, das Verhalten solcher Tools nachzuvollziehen. Setze sie nicht gegen andere Personen ein.
 
-## 🚀 Anwendung
+1. **UI starten:**
 
-Nachdem die Konfiguration abgeschlossen ist, können Sie die ausführbare Datei generieren.
+   ```bash
+   python glogger_ui.py
+   ```
 
-1.  **Hauptmenü starten**:
-    Führen Sie das UI-Skript aus, um das Hauptmenü anzuzeigen.
-    ```bash
-    python glogger_ui.py
-    ```
+2. Im Menü kannst du dann Skripte generieren lassen (Keylogger oder Graber). Die Details der Ausführung entnimmst du am besten direkt dem Quellcode – er ist bewusst einfach gehalten, damit du ihn nachvollziehen und analysieren kannst.
 
-2. **Graber generieren**:
+3. Die generierten Skripte legen ihre Ausgaben (Logs, Exportordner etc.) lokal auf deinem System ab. Lies diese Dateien bewusst und analysiere, **welche Informationen in welcher Form erfasst werden**.
 
-    -   Wählen Sie im Menü die Option **"2. Graber"**.
+> **Sicherheitshinweis:** Das Speichern eines Access Tokens im Klartext im Quellcode ist unsicher. Für produktive Szenarien solltest du stattdessen z.B. Umgebungsvariablen oder einen sicheren Secret-Store verwenden. Hier geschieht es nur aus didaktischen Gründen, um die Funktionsweise leicht nachvollziehbar zu machen.
 
-    -   Das Skript generiert nun die `Graber.py`-Datei und kompiliert sie mit PyInstaller zu einer einzigen `.exe`-Datei.
+## Aufräumen von Build- und Export-Artefakten
 
-
-
-### Keylogger Generierung
-
-
-
-Um die ausführbare Datei des Keyloggers (`Graber.exe`) zu generieren, führen Sie das Skript `glogger_ui.py` aus und wählen Sie die entsprechende Option.
-
-
-
-Alternativ können Sie das Skript `tools/generate_keylogger.py` direkt ausführen, um den Keylogger zu erstellen. Beachten Sie, dass dies möglicherweise weitere Konfigurationsschritte erfordert, die normalerweise über die UI (`glogger_ui.py`) gehandhabt werden.
-
-
-
-**Beispiel für direkte Generierung:**
-
-
+Nach Tests kannst du mit folgendem Skript die wichtigsten Artefakte entfernen:
 
 ```bash
-
-python tools/generate_keylogger.py
-
+python clean_pyinstaller.py
 ```
 
+Das Skript entfernt u.a.:
 
+- `dist/` und `build/` (PyInstaller-Ausgaben),
+- `.spec`-Dateien,
+- den Exportordner `G_LoggerExport` im Benutzerverzeichnis und das zugehörige ZIP.
 
-3. **Ergebnis finden**:
-
-    -   Die fertige ausführbare Datei befindet sich im `dist/`-Ordner: `dist/Graber.exe`.
-
-Diese `Graber.exe` ist die eigenständige Anwendung, die auf einem Ziel-Windows-System ausgeführt werden kann. Beim Ausführen arbeitet sie unsichtbar im Hintergrund und lädt am Ende die erstellte ZIP-Datei (z.B. `G_LoggerExport_20251119-153000.zip`) in Ihr Dropbox-Konto hoch.
